@@ -10,7 +10,8 @@
 	
 	"hasInput":false,
 	"hasOutput":true,
-	"hideDefaultCommands":false,
+	"hideDefaultCommands":true,
+	"hideDefaultParameters":true,
 
 	"defaults":
 	{	
@@ -23,8 +24,8 @@
 	"parameters":
 	{
 		"Reset All": { "type":"Trigger" },
-		"Mute": {"type":"Trigger", "default":"false"},
-		"Update Rate": { "type":"Integer","default":30,"min":1,"max":200},
+		"Update Rate": { "type":"Integer","default":30,"min":1,"max":50},
+		"Mute": {"type":"Boolean", "default":"false"},
 		"Scene" : {"type" : "Boolean", "readonly":"true","default":true},
 		"Person 0" : {"type" : "Boolean", "readonly":"true","default":false},
 		"Person 1" : {"type" : "Boolean", "readonly":"true","default":false},
@@ -58,7 +59,8 @@
 			"numPeople":
 			{
 				"type":"Integer",
-				"min":0
+				"min":0,
+				"max":5
 			},
 			"averageMotionX":
 			{
@@ -592,6 +594,12 @@
 				{
 					"type":"Boolean",
 				},
+				"numPeople":
+				{
+					"type":"Integer",
+					"min":0,
+					"max":5
+				},
 				"width":
 				{
 					"type":"Integer",
@@ -609,13 +617,105 @@
 				}
 			}
 		},
-		"Add Person":
-		{
 
+		"Set Person":
+		{
+			"callback":"setPerson",
+			"parameters":
+			{
+				"oid":
+				{
+					"type":"Integer",
+					"min":0,
+					"max":5	
+				},
+				"centroidX":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
+				},
+				"centroidY":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
+				},
+				"velocityX":
+				{
+					"type":"Float",
+					"min":-1,
+					"max":1
+				},
+				"velocityY":
+				{
+					"type":"Float",
+					"min":-1,
+					"max":1
+				},
+				"depth":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
+				},
+				"boundingRectX":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
+				},
+				"boundingRectY":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
+				},
+				"boundingRectWidth":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
+				},
+				"boundingRectHeight":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
+				},
+				"HighestX":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
+				},
+				"HighestY":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
+				},
+				"HighestZ":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
+				}
+			}
 		},
-		"Remove last Person":
-		{
 
-		}
+		"Set number of people to send":
+		{
+			"callback":"setNumPeople",
+			"parameters":
+			{
+				"numPeople":
+				{
+					"type":"Integer",
+					"min":0,
+					"max":5
+				},
+			}
+		},
 	}
 }

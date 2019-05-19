@@ -55,6 +55,5 @@ Thanks to [BenKuper] for his kind support and his awesome open source software.
 [Chataigne][] is opensource you can check it here : https://github.com/benkuper/Chataigne
 
 [BenKuper]: https://github.com/benkuper
-[Chataigne]: https://benjamin.kuperberg.fr/chataigne/
-[Augmenta]: https://www.augmenta-tech.com/
-[Théoriz studio]: https://www.theoriz.com/
+[Chataigne]: http://benjamin.kuperberg.fr/chataigne/
+[Théoriz studio]: http://www.theoriz.com/

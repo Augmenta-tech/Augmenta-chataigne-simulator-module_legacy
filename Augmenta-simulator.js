@@ -8,167 +8,140 @@ This code has been tested on Chataigne 1.6.0+
 
 */
 
+// Default values for reset
+var sceneDefaultWidth = 640;
+var sceneDefaultHeight = 480;
+var maxNumPeople = 5;
+
+var updateRate = local.parameters.updateRate.get() == 0?0:1.0 / local.parameters.updateRate.get(); // for now Chataigne allows 50hz max
+
 function update()
 {
-	
-	if(!local.parameters.isConnected.get()) return;
-	
-	if(!pairingMode)
+	// TODO check connection
+	//if(!local.parameters.isConnected.get()) return;
+
+	if(!local.parameters.mute.get())
 	{
 		var time = util.getTime();
-
-		if(time > lastCheckTime + 5) //check every 5 seconds
-		{
-			lastCheckTime = time;
-
-			//send list request
-			for(var i=0;i<32;i++) slaveCheckList[i] = false;
-			local.send("glist");
-			
-		}
-
-		if(alwaysUpdate && time > lastUpdateTime+updateRate)
+		if(time > lastUpdateTime+updateRate)
 		{
 			lastUpdateTime = time;
-			sendAllColors();
-
-		}
-	}
-}
-
-function oscEvent(address,args)
-{
-
-	if(address == "/au/scene")
-	{
-		setAugmentaScene(local.values.scene, args);
-
-	} else if(address == "/au/personUpdated" || address == "/au/personEntered")
-	{
-		if(args[1] == 0) //args[1] = oid
-		{
-			setAugmentaPerson(local.values.person0, args);
-
-			// Oldest is always oid = 0 if algo is correctly implemented
-			if(local.parameters.singlePersonMode.getData() == "oldest")
-			{
-				setAugmentaPerson(local.values.singlePerson, args);	
-			}
-			
-		} else if(args[1] == 1)
-		{
-			setAugmentaPerson(local.values.person1, args);
-		} else if(args[1] == 2)
-		{
-			setAugmentaPerson(local.values.person2, args);
-		} else if(args[1] == 3)
-		{
-			setAugmentaPerson(local.values.person3, args);
-		} else if(args[1] == 4)
-		{
-			setAugmentaPerson(local.values.person4, args);
-		}
-
-		// Check and udate newest
-		if(local.parameters.singlePersonMode.getData() == "newest")
-		{
-			updateNewest(args);
-		}
-
-	} else if(address == "/au/personWillLeave")
-	{
-		if(args[1] == 0) //args[1] = oid
-		{
-			resetAugmentaPerson(local.values.person0, args);
-
-			// Oldest is always oid = 0 if algo is correctly implemented
-			if(local.parameters.singlePersonMode.getData() == "oldest")
-			{
-				resetAugmentaPerson(local.values.singlePerson, args);	
-			}
-			
-		} else if(args[1] == 1)
-		{
-			resetAugmentaPerson(local.values.person1, args);
-		} else if(args[1] == 2)
-		{
-			resetAugmentaPerson(local.values.person2, args);
-		} else if(args[1] == 3)
-		{
-			resetAugmentaPerson(local.values.person3, args);
-		} else if(args[1] == 4)
-		{
-			resetAugmentaPerson(local.values.person4, args);
-		}
-
-		// Check and update newest
-		if(local.parameters.singlePersonMode.getData() == "newest")
-		{
-			resetNewest(args);
+			sendScene();
+			sendPersons();
 		}
 	}
 }
 
 function moduleParameterChanged(param)
 {
-
-	script.log("Parameter changed : "+param.name+" : "+param.get());
-}
-
-function setAugmentaPerson(person, args)
-{
-	person.hasData.set(true);
-	person.pid.set(args[0]);
-	person.oid.set(args[1]);
-	person.age.set(args[2]);
-	person.centroidX.set(args[3]);
-	person.centroidY.set(args[4]);
-	person.velocityX.set(args[5]);
-	person.velocityY.set(args[6]);
-	person.depth.set(args[7]);
-	person.boundingRectX.set(args[8]);
-	person.boundingRectY.set(args[9]);
-	person.boundingRectWidth.set(args[10]);
-	person.boundingRectHeight.set(args[11]);
-	person.highestX.set(args[12]);
-	person.highestY.set(args[13]);
-	person.highestZ.set(args[14]);
-}
-
-function setAugmentaScene(scene, args)
-{
-	scene.currentTime.set(args[0]);
-	scene.percentCovered.set(args[1]);
-	scene.numPeople.set(args[2]);
-	numPeople = args[2];
-	scene.averageMotionX.set(args[3]);
-	scene.averageMotionY.set(args[4]);
-	scene.width.set(args[5]);
-	scene.height.set(args[6]);
-	scene.depth.set(args[7]);
-}
-
-function updateNewest(args)
-{
-
-	//script.log("num people : " + scene.numPeople);
-
-	if(args[1] == (numPeople - 1)) // args[1] is oid
+	if(param.name == "updateRate")
 	{
-		setAugmentaPerson(local.values.singlePerson, args);	
+		updateRate = param.get() == 0?0:1.0/param.get();
+		script.log("new update rate : "+updateRate);
+	} else if(param.name == "resetAll")
+	{
+		resetAll();
+	}else if(param.name == "mute")
+	{
+		if(local.parameters.mute.get())
+		{
+			local.parameters.scene.set(false);
+			local.parameters.person0.set(false);
+			local.parameters.person1.set(false);
+			local.parameters.person2.set(false);
+			local.parameters.person3.set(false);
+			local.parameters.person4.set(false);
+		} else
+		{
+			updateUI();
+		}
 	}
 }
 
-function setScene(ResetCurrentTime, width, height, depth)
+function resetAll()
+{
+	script.log("Resetting all values to default");
+	// reset scene to defaults values
+	setScene(true,0,sceneDefaultWidth,sceneDefaultHeight,0);
+	// reset other coordinates
+	// reset persons to defaults values
+	/*for(var i=0;i<maxNumPeople;i++)
+	{
+		//setPerson(i,);
+		// reset other values
+	}*/
+}
+
+function setScene(ResetCurrentTime, numPeople, width, height, depth)
 {
 	script.log("width : "+ width + " " + height);
 
 	if(ResetCurrentTime)
 	{
-		scene.currentTime.set(0);
+		local.values.scene.currentTime.set(0);
 	}
 
-	scene.width.set(width);
-	scene.height.set(height);
-	scene.depth.set(depth);
+	local.values.scene.numPeople.set(numPeople);
+	local.values.scene.width.set(width);
+	local.values.scene.height.set(height);
+	local.values.scene.depth.set(depth);
+	//updateUI();
+}
+
+function setPerson()
+{
+
+}
+
+function setNumPeople(numPeople)
+{
+	local.values.scene.numPeople.set(numPeople);
+	script.log("Setting numPeople to " + local.values.scene.numPeople.get());
+	//updateUI();
+}
+
+function sendScene()
+{
+	local.parameters.scene.set(true);
+	//scene.age.set(1);
+}
+
+function sendPersons()
+{
+
+}
+
+function updateUI()
+{
+	// Just updating UI (parameters)
+	if(local.values.scene.numPeople.get() == 1)
+	{
+		local.parameters.person0.set(true);
+
+	} else if(local.values.scene.numPeople.get() == 2)
+	{
+		local.parameters.person0.set(true);
+		local.parameters.person1.set(true);
+
+	} else if(local.values.scene.numPeople.get() == 3)
+	{
+		local.parameters.person0.set(true);
+		local.parameters.person1.set(true);
+		local.parameters.person2.set(true);
+
+	} else if(local.values.scene.numPeople.get() == 4)
+	{
+		local.parameters.person0.set(true);
+		local.parameters.person1.set(true);
+		local.parameters.person2.set(true);
+		local.parameters.person3.set(true);
+
+	} else if(local.values.scene.numPeople.get() == 5)
+	{
+		local.parameters.person0.set(true);
+		local.parameters.person1.set(true);
+		local.parameters.person2.set(true);
+		local.parameters.person3.set(true);
+		local.parameters.person4.set(true);
+	}
 }
