@@ -261,6 +261,8 @@ function updateScene()
 {
 	local.values.scene.currentTime.set(local.values.scene.currentTime.get()+1); // incrementing time
 	local.parameters.scene.set(true); // setting UI
+	// TODO : compute average motion here
+	// TODO : computer percent covered here
 }
 
 function sendScene()
@@ -278,7 +280,6 @@ function sendScene()
 
 function updateUI()
 {
-
 	if(local.values.scene.numPeople.get() == 0)
 	{
 		local.parameters.person0.set(false);
@@ -286,6 +287,10 @@ function updateUI()
 		local.parameters.person2.set(false);
 		local.parameters.person3.set(false);
 		local.parameters.person4.set(false);
+		for(var i=0;i<maxNumPeople;i++)
+		{
+			personArray[i].sendData.set(false);
+		}
 
 	} else if(local.values.scene.numPeople.get() == 1)
 	{
@@ -294,6 +299,10 @@ function updateUI()
 		local.parameters.person2.set(false);
 		local.parameters.person3.set(false);
 		local.parameters.person4.set(false);
+		for(var i=maxNumPeople-1;i>4;i--)
+		{
+			personArray[i].sendData.set(false);
+		}
 
 	} else if(local.values.scene.numPeople.get() == 2)
 	{
@@ -302,6 +311,10 @@ function updateUI()
 		local.parameters.person2.set(false);
 		local.parameters.person3.set(false);
 		local.parameters.person4.set(false);
+		for(var i=maxNumPeople-1;i>1;i--)
+		{
+			personArray[i].sendData.set(false);
+		}
 
 	} else if(local.values.scene.numPeople.get() == 3)
 	{
@@ -310,6 +323,10 @@ function updateUI()
 		local.parameters.person2.set(true);
 		local.parameters.person3.set(false);
 		local.parameters.person4.set(false);
+		for(var i=maxNumPeople-1;i>2;i--)
+		{
+			personArray[i].sendData.set(false);
+		}
 
 	} else if(local.values.scene.numPeople.get() == 4)
 	{
@@ -318,6 +335,10 @@ function updateUI()
 		local.parameters.person2.set(true);
 		local.parameters.person3.set(true);
 		local.parameters.person4.set(false);
+		for(var i=maxNumPeople-1;i>3;i--)
+		{
+			personArray[i].sendData.set(false);
+		}
 
 	} else if(local.values.scene.numPeople.get() == 5)
 	{
@@ -332,7 +353,7 @@ function updateUI()
 function resetPerson(oid)
 {
 	personArray[oid].age.set(0);
-	personArray[oid].pid.set(0);
+	//personArray[oid].pid.set(0);
 	personArray[oid].centroidX.set(0);
 	personArray[oid].centroidY.set(0);
 	personArray[oid].velocityX.set(0);
@@ -398,4 +419,6 @@ function sendPerson(oid, state)
 		personArray[oid].highestX,
 		personArray[oid].highestY,
 		personArray[oid].highestZ);
+
+	personArray[oid].sendData.set(true);
 }
