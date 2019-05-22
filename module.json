@@ -1,5 +1,5 @@
 {
-	"name":"Augmenta simulator",
+	"name":"Augmenta Simulator",
 	"type":"OSC",
 	"path":"Theoriz",
 	
@@ -17,7 +17,7 @@
 	{	
 		"OSC Outputs":
 		{	
-			"OSC Output":{"local":true,"remotePort":13000}
+			"OSC Output":{"local":true,"remotePort":12000}
 		}	
 	},
 
@@ -25,13 +25,12 @@
 	{
 		"Reset All": { "type":"Trigger" },
 		"Update Rate": { "type":"Integer","default":30,"min":1,"max":50},
-		"Mute": {"type":"Boolean", "default":"false"},
 		"Scene" : {"type" : "Boolean", "readonly":"true","default":true},
-		"Person 0" : {"type" : "Boolean", "readonly":"true","default":false},
-		"Person 1" : {"type" : "Boolean", "readonly":"true","default":false},
-		"Person 2" : {"type" : "Boolean", "readonly":"true","default":false},
-		"Person 3" : {"type" : "Boolean", "readonly":"true","default":false},
-		"Person 4" : {"type" : "Boolean", "readonly":"true","default":false}
+		"Person 0" : {"type" : "Boolean", "default":false},
+		"Person 1" : {"type" : "Boolean", "default":false},
+		"Person 2" : {"type" : "Boolean", "default":false},
+		"Person 3" : {"type" : "Boolean", "default":false},
+		"Person 4" : {"type" : "Boolean", "default":false}
 	},
 
 	"scripts":
@@ -106,14 +105,8 @@
 				"type":"Integer",
 				"min":0
 			},
-			"oid":
-			{
-				"type":"Integer",
-				"min":0
-			},
 			"age":
 			{
-
 				"type":"Integer",
 				"min":0
 			},
@@ -200,11 +193,6 @@
 				"type":"Boolean"
 			},
 			"pid":
-			{
-				"type":"Integer",
-				"min":0
-			},
-			"oid":
 			{
 				"type":"Integer",
 				"min":0
@@ -302,11 +290,6 @@
 				"type":"Integer",
 				"min":0
 			},
-			"oid":
-			{
-				"type":"Integer",
-				"min":0
-			},
 			"age":
 			{
 
@@ -396,11 +379,6 @@
 				"type":"Boolean"
 			},
 			"pid":
-			{
-				"type":"Integer",
-				"min":0
-			},
-			"oid":
 			{
 				"type":"Integer",
 				"min":0
@@ -497,14 +475,8 @@
 				"type":"Integer",
 				"min":0
 			},
-			"oid":
-			{
-				"type":"Integer",
-				"min":0
-			},
 			"age":
 			{
-
 				"type":"Integer",
 				"min":0
 			},
