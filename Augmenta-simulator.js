@@ -163,91 +163,22 @@ function setScene(ResetCurrentTime, numPeople, width, height, depth)
 
 function setPerson(oid, centroidX, centroidY, velocityX, velocityY, depth, boundingRectX, boundingRectY, boundingRectWidth, boundingRectHeight, highestX, highestY, highestZ)
 {
-	if(oid ==0)
-	{
-		local.values.person0.pid = pid+1;
-		// age is computed during update
-		local.values.person0.centroidX = centroidX;
-		local.values.person0.centroidX = centroidY;
-		local.values.person0.centroidX = velocityX;
-		local.values.person0.centroidX = velocityY;
-		local.values.person0.centroidX = depth;
-		local.values.person0.centroidX = boundingRectX;
-		local.values.person0.centroidX = boundingRectY;
-		local.values.person0.centroidX = boundingRectWidth;
-		local.values.person0.centroidX = boundingRectHeight;
-		local.values.person0.centroidX = highestX;
-		local.values.person0.centroidX = highestY;
-		local.values.person0.centroidX = highestZ;
-
-	} else if(oid ==1)
-	{
-		local.values.person1.pid = pid+1;
-		// age is computed during update
-		local.values.person1.centroidX = centroidX;
-		local.values.person1.centroidX = centroidY;
-		local.values.person1.centroidX = velocityX;
-		local.values.person1.centroidX = velocityY;
-		local.values.person1.centroidX = depth;
-		local.values.person1.centroidX = boundingRectX;
-		local.values.person1.centroidX = boundingRectY;
-		local.values.person1.centroidX = boundingRectWidth;
-		local.values.person1.centroidX = boundingRectHeight;
-		local.values.person1.centroidX = highestX;
-		local.values.person1.centroidX = highestY;
-		local.values.person1.centroidX = highestZ;
-
-	} else if(oid ==2)
-	{
-		local.values.person2.pid = pid+1;
-		// age is computed during update
-		local.values.person2.centroidX = centroidX;
-		local.values.person2.centroidX = centroidY;
-		local.values.person2.centroidX = velocityX;
-		local.values.person2.centroidX = velocityY;
-		local.values.person2.centroidX = depth;
-		local.values.person2.centroidX = boundingRectX;
-		local.values.person2.centroidX = boundingRectY;
-		local.values.person2.centroidX = boundingRectWidth;
-		local.values.person2.centroidX = boundingRectHeight;
-		local.values.person2.centroidX = highestX;
-		local.values.person2.centroidX = highestY;
-		local.values.person2.centroidX = highestZ;
-
-	} else if(oid ==3)
-	{
-		local.values.person3.pid = pid+1;
-		// age is computed during update
-		local.values.person3.centroidX = centroidX;
-		local.values.person3.centroidX = centroidY;
-		local.values.person3.centroidX = velocityX;
-		local.values.person3.centroidX = velocityY;
-		local.values.person3.centroidX = depth;
-		local.values.person3.centroidX = boundingRectX;
-		local.values.person3.centroidX = boundingRectY;
-		local.values.person3.centroidX = boundingRectWidth;
-		local.values.person3.centroidX = boundingRectHeight;
-		local.values.person3.centroidX = highestX;
-		local.values.person3.centroidX = highestY;
-		local.values.person3.centroidX = highestZ;
-
-	} else if(oid ==4)
-	{
-		local.values.person4.pid = pid+1;
-		// age is computed during update
-		local.values.person4.centroidX = centroidX;
-		local.values.person4.centroidX = centroidY;
-		local.values.person4.centroidX = velocityX;
-		local.values.person4.centroidX = velocityY;
-		local.values.person4.centroidX = depth;
-		local.values.person4.centroidX = boundingRectX;
-		local.values.person4.centroidX = boundingRectY;
-		local.values.person4.centroidX = boundingRectWidth;
-		local.values.person4.centroidX = boundingRectHeight;
-		local.values.person4.centroidX = highestX;
-		local.values.person4.centroidX = highestY;
-		local.values.person4.centroidX = highestZ;
-	}
+	personArray[oid].pid.set(pid+1);
+	pid++;
+	// age is computed during update
+	personArray[oid].centroidX.set(centroidX);
+	personArray[oid].centroidY.set(centroidY);
+	personArray[oid].velocityX.set(velocityX);
+	personArray[oid].velocityY.set(velocityY);
+	personArray[oid].depth.set(depth);
+	personArray[oid].boundingRectX.set(boundingRectX);
+	personArray[oid].boundingRectY.set(boundingRectY);
+	personArray[oid].boundingRectY.set(boundingRectY);
+	personArray[oid].boundingRectWidth.set(boundingRectWidth);
+	personArray[oid].boundingRectHeight.set(boundingRectHeight);
+	personArray[oid].highestX.set(highestX);
+	personArray[oid].highestY.set(highestY);
+	personArray[oid].highestZ.set(highestZ);
 }
 
 function setNumPeople(numPeople)
@@ -353,7 +284,7 @@ function updateUI()
 function resetPerson(oid)
 {
 	personArray[oid].age.set(0);
-	//personArray[oid].pid.set(0);
+	personArray[oid].pid.set(0);
 	personArray[oid].centroidX.set(0);
 	personArray[oid].centroidY.set(0);
 	personArray[oid].velocityX.set(0);
@@ -404,21 +335,21 @@ function sendPerson(oid, state)
 	local.send(
 
 		address,
-		personArray[oid].pid,
+		personArray[oid].pid.get(),
 		oid,
-		personArray[oid].age,
-		personArray[oid].centroidX,
-		personArray[oid].centroidY,
-		personArray[oid].velocityX,
-		personArray[oid].velocityY,
-		personArray[oid].depth,
-		personArray[oid].boundingRectX,
-		personArray[oid].boundingRectY,
-		personArray[oid].boundingRectWidth,
-		personArray[oid].boundingRectHeight,
-		personArray[oid].highestX,
-		personArray[oid].highestY,
-		personArray[oid].highestZ);
+		personArray[oid].age.get(),
+		personArray[oid].centroidX.get(),
+		personArray[oid].centroidY.get(),
+		personArray[oid].velocityX.get(),
+		personArray[oid].velocityY.get(),
+		personArray[oid].depth.get(),
+		personArray[oid].boundingRectX.get(),
+		personArray[oid].boundingRectY.get(),
+		personArray[oid].boundingRectWidth.get(),
+		personArray[oid].boundingRectHeight.get(),
+		personArray[oid].highestX.get(),
+		personArray[oid].highestY.get(),
+		personArray[oid].highestZ.get());
 
 	personArray[oid].sendData.set(true);
 }
