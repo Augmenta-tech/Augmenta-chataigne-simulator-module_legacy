@@ -25,7 +25,6 @@
 	{
 		"Reset All": { "type":"Trigger" },
 		"Update Rate": { "type":"Integer","default":30,"min":1,"max":50},
-		"Scene" : {"type" : "Boolean", "readonly":true,"default":true},
 		"Person 0" : {"type" : "Boolean", "default":false},
 		"Person 1" : {"type" : "Boolean", "default":false},
 		"Person 2" : {"type" : "Boolean", "default":false},

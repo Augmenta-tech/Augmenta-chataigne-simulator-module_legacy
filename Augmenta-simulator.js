@@ -12,6 +12,7 @@ This code has been tested on Chataigne 1.6.0+
 var sceneDefaultWidth = 640;
 var sceneDefaultHeight = 480;
 var maxNumPeople = 5;
+var numPeopleSaved = -1;
 
 // updateRate
 var updateRate;
@@ -44,10 +45,8 @@ function init()
 
 function update()
 {
-	// TODO check connection
+	// TODO check connection ?
 	//if(!local.parameters.isConnected.get()) return;
-
-	//script.log("mute "+local.parameters.mute.get());
 
 	// Update rate computation
 	var time = util.getTime();
@@ -129,6 +128,16 @@ function moduleParameterChanged(param)
 	}
 }
 
+// TODO sendData value to take into account
+/*function moduleValueChanged(param)
+{
+	if(value.name == "person0.senddata")
+	{
+		script.log("test");
+	}
+
+}*/
+
 function resetAll()
 {
 	script.log("Reseting all values to default");
@@ -175,8 +184,6 @@ function setPerson(oid, centroidX, centroidY, velocityX, velocityY, depth, bound
 	personArray[oid].highestX.set(highestX);
 	personArray[oid].highestY.set(highestY);
 	personArray[oid].highestZ.set(highestZ);
-
-	setNumPeople(oid+1); // Sending the person when setting its value
 }
 
 function setNumPeople(numPeople)
@@ -193,7 +200,12 @@ function setNumPeople(numPeople)
 function updateScene()
 {
 	local.values.scene.currentTime.set(local.values.scene.currentTime.get()+1); // incrementing time
-	local.parameters.scene.set(true); // setting UI
+	if(local.values.scene.numPeople.get() != numPeopleSaved)
+	{
+		updateUI();
+		numPeopleSaved = local.values.scene.numPeople.get();
+	}
+
 	// TODO : compute average motion here
 	// TODO : computer percent covered here
 }
