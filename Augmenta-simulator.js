@@ -131,7 +131,7 @@ function moduleParameterChanged(param)
 
 function resetAll()
 {
-	script.log("Reseting all values to default" + local.values.scene.numPeople.get());
+	script.log("Reseting all values to default");
 	// reset scene to defaults values
 	setScene(true,0,sceneDefaultWidth,sceneDefaultHeight,0);
 	setScene(true,0,sceneDefaultWidth,sceneDefaultHeight,0); // dirty mandatory line for good UI
@@ -146,19 +146,15 @@ function resetAll()
 
 function setScene(ResetCurrentTime, numPeople, width, height, depth)
 {
-	script.log("size "+ width + "x" + height);
-
 	if(ResetCurrentTime)
 	{
 		local.values.scene.currentTime.set(0);
 	}
 
-	local.values.scene.numPeople.set(numPeople);
-	script.log("size "+ width + "x" + height);
+	setNumPeople(numPeople);
 	local.values.scene.width.set(width);
 	local.values.scene.height.set(height);
 	local.values.scene.depth.set(depth);
-	updateUI();
 }
 
 function setPerson(oid, centroidX, centroidY, velocityX, velocityY, depth, boundingRectX, boundingRectY, boundingRectWidth, boundingRectHeight, highestX, highestY, highestZ)
@@ -179,13 +175,19 @@ function setPerson(oid, centroidX, centroidY, velocityX, velocityY, depth, bound
 	personArray[oid].highestX.set(highestX);
 	personArray[oid].highestY.set(highestY);
 	personArray[oid].highestZ.set(highestZ);
+
+	setNumPeople(oid+1); // Sending the person when setting its value
 }
 
 function setNumPeople(numPeople)
 {
-	local.values.scene.numPeople.set(numPeople);
-	script.log("Setting numPeople to " + local.values.scene.numPeople.get());
-	updateUI();
+	// Changing only if necessary
+	if(local.values.scene.numPeople.get() != numPeople)
+	{
+		local.values.scene.numPeople.set(numPeople);
+		script.log("Setting numPeople to " + local.values.scene.numPeople.get());
+		updateUI();
+	}
 }
 
 function updateScene()
