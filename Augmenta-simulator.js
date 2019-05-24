@@ -34,8 +34,6 @@ function init()
 					local.values.person3,
 					local.values.person4];
 
-//script.log("test",personArray[0].centroidX.get());
-
 	// States : none entered update left
 	for(var i=0;i<maxNumPeople;i++)
 	{
@@ -45,9 +43,6 @@ function init()
 
 function update()
 {
-	// TODO check connection ?
-	//if(!local.parameters.isConnected.get()) return;
-
 	// Update rate computation
 	var time = util.getTime();
 	if(time > lastUpdateTime+updateRate)
@@ -129,21 +124,21 @@ function moduleParameterChanged(param)
 }
 
 // TODO sendData value to take into account
-/*function moduleValueChanged(param)
+function moduleValueChanged(param)
 {
-	if(value.name == "person0.senddata")
+	/*if(value.name == "person0.sendData") // somehow this does not work
 	{
 		script.log("test");
-	}
+	}*/
 
-}*/
+}
 
 function resetAll()
 {
 	script.log("Reseting all values to default");
 	// reset scene to defaults values
-	setScene(true,0,sceneDefaultWidth,sceneDefaultHeight,0);
-	setScene(true,0,sceneDefaultWidth,sceneDefaultHeight,0); // dirty mandatory line for good UI
+	setSceneSize(true,0,sceneDefaultWidth,sceneDefaultHeight,0);
+	setSceneSize(true,0,sceneDefaultWidth,sceneDefaultHeight,0); // dirty mandatory line for good UI
 
 	// reset other coordinates
 	// reset persons to defaults values
@@ -153,14 +148,13 @@ function resetAll()
 	}
 }
 
-function setScene(ResetCurrentTime, numPeople, width, height, depth)
+function setSceneSize(ResetCurrentTime, numPeople, width, height, depth)
 {
 	if(ResetCurrentTime)
 	{
 		local.values.scene.currentTime.set(0);
 	}
 
-	setNumPeople(numPeople);
 	local.values.scene.width.set(width);
 	local.values.scene.height.set(height);
 	local.values.scene.depth.set(depth);
@@ -195,6 +189,16 @@ function setNumPeople(numPeople)
 		script.log("Setting numPeople to " + local.values.scene.numPeople.get());
 		updateUI();
 	}
+}
+
+function setPersonX(oid, centroidX)
+{
+	personArray[oid].centroidX.set(centroidX);
+}
+
+function setPersonY(oid, centroidY)
+{
+	personArray[oid].centroidY.set(centroidY);
 }
 
 function updateScene()
@@ -315,9 +319,45 @@ function resetPerson(oid)
 
 function updatePersons()
 {
-	for(var i=0;i<local.values.scene.numPeople.get();i++)
+	for(var i=0;i<maxNumPeople;i++)
 	{
-		personArray[i].age.set(personArray[i].age.get() + 1);
+		// Processing Alive people
+		if(i<=(local.values.scene.numPeople.get()-1))
+		{
+			if(personStateArray[i] == "none")
+			{
+				personStateArray[i] = "personEntered";
+				personArray[i].pid.set(pid+1);
+				pid++;
+
+			} else if (personStateArray[i] == "personEntered")
+			{
+				personStateArray[i] = "personUpdated";
+
+			} else
+			{
+				//script.log("Strange state for an alive person : " + personStateArray[oid]);
+			}
+
+			personArray[i].age.set(personArray[i].age.get() + 1);
+
+		} else // processing dying people
+		{
+			if(personStateArray[i] == "personUpdated")
+			{
+				personStateArray[i] = "personWillLeave";
+				personArray[i].age.set(personArray[i].age.get() + 1);
+
+			} else if(personStateArray[i] == "personWillLeave")
+			{
+				personStateArray[i] = "none";
+				personArray[i].age.set(0);
+
+			} else
+			{
+				//script.log("Strange state for a dying person : " + personStateArray[oid]);
+			}
+		}
 	}
 }
 

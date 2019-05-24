@@ -555,20 +555,14 @@
 
 	"commands":
 	{
-		"Set Scene":
+		"Set scene size":
 		{
-			"callback":"setScene",
+			"callback":"setSceneSize",
 			"parameters":
 			{
 				"resetCurrentTime":
 				{
-					"type":"Boolean",
-				},
-				"numPeople":
-				{
-					"type":"Integer",
-					"min":0,
-					"max":5
+					"type":"Boolean"
 				},
 				"width":
 				{
@@ -584,6 +578,46 @@
 				{
 					"type":"Integer",
 					"min":0
+				}
+			}
+		},
+
+		"Set person centroid X":
+		{
+			"callback":"setPersonX",
+			"parameters":
+			{
+				"oid":
+				{
+					"type":"Integer",
+					"min":0,
+					"max":4	
+				},
+				"centroidX":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
+				}
+			}
+		},
+
+		"Set person centroid Y":
+		{
+			"callback":"setPersonY",
+			"parameters":
+			{
+				"oid":
+				{
+					"type":"Integer",
+					"min":0,
+					"max":4	
+				},
+				"centroidY":
+				{
+					"type":"Float",
+					"min":0,
+					"max":1
 				}
 			}
 		},
@@ -684,7 +718,7 @@
 					"type":"Integer",
 					"min":0,
 					"max":5
-				},
+				}
 			}
 		},
 	}
