@@ -5,13 +5,12 @@
 	
 	"version":"0.0.1",
 	"description":"Simulate tracking data from THEORIZ's Augmenta tracking system",
-	"url":"https://github.com/Theoriz/Augmenta-simulator-chataigne-module",
-	"downloadURL":"https://github.com/Theoriz/Augmenta-simulator-chataigne-module/archive/master.zip",
-	
+	"url":"https://github.com/Theoriz/Augmenta-chataigne-simulator-module",
+	"downloadURL" : "https://github.com/Theoriz/Augmenta-chataigne-simulator-module/archive/master.zip",
 	"hasInput":false,
 	"hasOutput":true,
 	"hideDefaultCommands":true,
-	"hideDefaultParameters":true,
+	"hideDefaultParameters": ["autoRange", "autoFeedback"],
 
 	"defaults":
 	{	
