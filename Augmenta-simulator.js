@@ -210,8 +210,27 @@ function updateScene()
 		numPeopleSaved = local.values.scene.numPeople.get();
 	}
 
-	// TODO : compute average motion here
-	// TODO : computer percent covered here
+	// Computing averageMotion and sumPercentcovered
+	if(local.values.scene.numPeople.get() > 0)
+	{
+		var sumVelocityX = 0;
+		var sumVelocityY = 0;		
+		var sumPercentcovered = 0;
+
+		for(var i=0;i<local.values.scene.numPeople.get();i++)
+		{
+			sumVelocityX = sumVelocityX + personArray[i].velocityX.get();
+			sumVelocityY = sumVelocityY + personArray[i].velocityY.get();
+			sumPercentcovered = sumPercentcovered +
+					personArray[i].boundingRectWidth.get() * personArray[i].boundingRectHeight.get();
+
+		}
+
+		local.values.scene.averageMotionX.set(sumVelocityX/local.values.scene.numPeople.get());
+		local.values.scene.averageMotionY.set(sumVelocityY/local.values.scene.numPeople.get());
+		local.values.scene.percentCovered.set(sumPercentcovered/local.values.scene.numPeople.get());
+
+	}
 }
 
 function sendScene()
@@ -333,6 +352,7 @@ function updatePersons()
 			} else if (personStateArray[i] == "personEntered")
 			{
 				personStateArray[i] = "personUpdated";
+				// TODO : compute speed
 
 			} else
 			{
@@ -347,11 +367,12 @@ function updatePersons()
 			{
 				personStateArray[i] = "personWillLeave";
 				personArray[i].age.set(personArray[i].age.get() + 1);
+				// TODO : compute speed
 
 			} else if(personStateArray[i] == "personWillLeave")
 			{
 				personStateArray[i] = "none";
-				personArray[i].age.set(0);
+				resetPerson(i);
 
 			} else
 			{
