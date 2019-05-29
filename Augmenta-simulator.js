@@ -124,14 +124,13 @@ function moduleParameterChanged(param)
 }
 
 // TODO sendData value to take into account
-function moduleValueChanged(param)
+/*function moduleValueChanged(value)
 {
-	/*if(value.name == "person0.sendData") // somehow this does not work
+	if(value.name == "sendData"  && value.getParent().name ==  "person0")
 	{
-		script.log("test");
-	}*/
-
-}
+		script.log("pO sendData " +value.getParent().name);
+	}
+}*/
 
 function resetAll()
 {
